@@ -466,10 +466,14 @@ resource "aws_ecs_service" "app" {
   }
 
   depends_on = [
-  aws_lb_listener.http,
-  aws_autoscaling_group.ecs,
-  aws_ecs_cluster_capacity_providers.main
-]
+    aws_lb_listener.http,
+    aws_autoscaling_group.ecs,
+    aws_ecs_cluster_capacity_providers.main,
+
+    aws_security_group_rule.db_mysql_from_ecs_task,
+    aws_route.vpc_2_to_vpc_1,
+    aws_route.vpc_1_to_vpc_2
+  ]
 
   tags = local.tags
   

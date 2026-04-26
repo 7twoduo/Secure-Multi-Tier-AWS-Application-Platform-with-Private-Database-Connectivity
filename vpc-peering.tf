@@ -120,6 +120,9 @@ resource "aws_route_table" "project1_private_rt" {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.project1_nat.id
   }
+  lifecycle {
+    ignore_changes = [route]
+  }
 
   tags = local.tags
 }
@@ -158,6 +161,9 @@ resource "aws_route_table" "project2_private_rt" {
   route {
     cidr_block = module.project2-vpc.vpc_cidr_block
     gateway_id = "local"
+  }
+  lifecycle {
+    ignore_changes = [route]
   }
 
   tags = local.tags
@@ -245,6 +251,9 @@ resource "aws_route_table" "project3_private_rt" {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.project3_nat.id
   }
+  lifecycle {
+    ignore_changes = [route]
+  }
 
   tags = local.tags
 }
@@ -297,10 +306,10 @@ resource "aws_route" "vpc_2_to_vpc_1" {
   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_2_to_vpc_1.id
 
   depends_on = [
-    aws_vpc_peering_connection_accepter.accept_vpc_2_to_vpc_1
+    aws_vpc_peering_connection_accepter.accept_vpc_2_to_vpc_1,
+    aws_route_table_association.project1_private_subnet_assoc
   ]
 }
-
 
 
 
@@ -324,7 +333,8 @@ resource "aws_route" "vpc_2_to_vpc_3" {
   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_2_to_vpc_3.id
 
   depends_on = [
-    aws_vpc_peering_connection_accepter.accept_vpc_2_to_vpc_3
+    aws_vpc_peering_connection_accepter.accept_vpc_2_to_vpc_3,
+    aws_route_table_association.project3_private_subnet_assoc
   ]
 }
 
@@ -343,7 +353,9 @@ resource "aws_route" "vpc_1_to_vpc_2" {
   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_2_to_vpc_1.id
 
   depends_on = [
-    aws_vpc_peering_connection_accepter.accept_vpc_2_to_vpc_1
+    aws_vpc_peering_connection_accepter.accept_vpc_2_to_vpc_1,
+    aws_route_table_association.project2_private_subnet_assoc,
+    aws_route_table_association.project2_private_subnet2_assoc
   ]
 }
 
@@ -351,10 +363,12 @@ resource "aws_route" "vpc_1_to_vpc_2" {
 resource "aws_route" "vpc_3_to_vpc_2" {
   route_table_id            = aws_route_table.project2_private_rt.id
   destination_cidr_block    = module.project3-vpc.vpc_cidr_block
-  vpc_peering_connection_id = aws_vpc_peering_connection.vpc_2_to_vpc_1.id
+  vpc_peering_connection_id = aws_vpc_peering_connection.vpc_2_to_vpc_3.id
 
   depends_on = [
-    aws_vpc_peering_connection_accepter.accept_vpc_2_to_vpc_3
+    aws_vpc_peering_connection_accepter.accept_vpc_2_to_vpc_3,
+    aws_route_table_association.project2_private_subnet_assoc,
+    aws_route_table_association.project2_private_subnet2_assoc
   ]
 }
 

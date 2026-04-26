@@ -168,6 +168,10 @@ resource "aws_instance" "ec2_app" {
   tags = merge(local.tags, {
     Name = "ec2-app${var.project_name}"
   })
+  depends_on = [
+    aws_route.vpc_2_to_vpc_3,
+    aws_route.vpc_3_to_vpc_2
+  ]
 }
 
 resource "aws_lb_target_group_attachment" "ec2_app" {

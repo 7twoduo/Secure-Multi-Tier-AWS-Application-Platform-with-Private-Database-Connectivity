@@ -12,8 +12,3 @@ variable "enable_ecs_service" {
   type    = bool
   default = true
 }
-
-# variable "enable_bootstrap_image_push" {
-#   type    = bool
-#   default = false
-# }

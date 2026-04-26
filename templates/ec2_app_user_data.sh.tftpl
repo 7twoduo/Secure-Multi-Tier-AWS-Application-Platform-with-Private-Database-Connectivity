@@ -1,3 +1,27 @@
+#!/bin/bash
+set -euxo pipefail
+
+exec > >(tee /var/log/ec2-app-user-data.log | logger -t ec2-app-user-data -s 2>/dev/console) 2>&1
+
+APP_PORT="${app_port}"
+DB_HOST="${db_host}"
+DB_PORT="${db_port}"
+DB_NAME="${db_name}"
+DB_USER="${db_user}"
+DB_PASSWORD="$(echo '${db_password_b64}' | base64 -d)"
+
+echo "Starting EC2 Flask app bootstrap..."
+
+dnf install -y python3 python3-pip python3-devel gcc openssl-devel libffi-devel
+
+mkdir -p /opt/flask-db-app
+cd /opt/flask-db-app
+
+python3 -m venv venv
+/opt/flask-db-app/venv/bin/pip install --upgrade pip
+/opt/flask-db-app/venv/bin/pip install flask pymysql gunicorn cryptography
+
+cat > /opt/flask-db-app/app.py <<'PYAPP'
 import os
 import socket
 import pymysql
@@ -189,7 +213,7 @@ HTML_TEMPLATE = """
       <div class="badge">{{ app_mode }}</div>
       <h1>{{ app_title }}</h1>
       <p class="subtitle">
-        {{ app_message }}. This page gives you a cleaner user experience and lets you validate health and database connectivity live from the browser.
+        {{ app_message }}. This page validates app health, runtime metadata, and database connectivity.
       </p>
 
       <div class="grid">
@@ -295,3 +319,41 @@ def dbcheck():
             "status": "failed",
             "error": str(e)
         }), 500
+PYAPP
+
+cat > /etc/flask-db-app.env <<EOF
+DB_HOST=$DB_HOST
+DB_PORT=$DB_PORT
+DB_NAME=$DB_NAME
+DB_USER=$DB_USER
+DB_PASSWORD=$DB_PASSWORD
+EOF
+
+chmod 600 /etc/flask-db-app.env
+
+cat > /etc/systemd/system/flask-db-app.service <<EOF
+[Unit]
+Description=Flask DB App
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/flask-db-app
+EnvironmentFile=/etc/flask-db-app.env
+ExecStart=/opt/flask-db-app/venv/bin/gunicorn -w 2 -b 0.0.0.0:$APP_PORT app:app
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable flask-db-app
+systemctl restart flask-db-app
+
+echo "EC2 Flask app bootstrap completed."
+
+systemctl status flask-db-app --no-pager -l || true
+ss -lntp | grep -E ":$APP_PORT|:80|:5000" || true
