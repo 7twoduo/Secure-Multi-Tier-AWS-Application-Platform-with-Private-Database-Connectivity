@@ -6,7 +6,6 @@
 
 <br/>
 
-<img width="1200" alt="Architecture Diagram" src="./Evidence/architecture-diagram.png" />
 
 <br/>
 <br/>
