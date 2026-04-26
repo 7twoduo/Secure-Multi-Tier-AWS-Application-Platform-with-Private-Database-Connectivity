@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+
+mkdir -p /etc/ecs
+
+cat > /etc/ecs/ecs.config <<EOF
+ECS_CLUSTER=ecs-vpc-peering-project-cluster
+EOF
+
+systemctl enable docker
+systemctl enable ecs
+systemctl start docker
+
+nohup bash -c 'sleep 30; systemctl start ecs' >/var/log/ecs-deferred-start.log 2>&1 &
