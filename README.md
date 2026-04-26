@@ -316,10 +316,10 @@ PROJECT 1/
 │   ├── ec2_app_user_data.sh.tftpl # User data for standalone EC2 Flask app
 │   └── ecs_user_data.sh.tftpl     # User data for ECS container instances
 │
-├── main-networking.tf            # Core networking resources
-├── region-1.tf                   # Primary region infrastructure
-├── region-2.tf                   # Secondary region / additional infrastructure
-├── region-3.tf                   # Tertiary region / additional infrastructure
+├── vpc-peering.tf                # Core networking resources
+├── vpc-1.tf                      # Primary region infrastructure
+├── vpc-2.tf                      # Secondary region / additional infrastructure
+├── vpc-3.tf                      # Tertiary region / additional infrastructure
 ├── workflow.tf                   # Deployment workflow resources
 ├── variable.tf                   # Terraform input variables
 ├── output.tf                     # Terraform outputs
