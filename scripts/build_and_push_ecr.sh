@@ -1,7 +1,7 @@
 #!/bin/bash
 ###                                                     MY MARVELOUS AND BEAUTIFUL SCRIPT
 ##########################  THIS SCRIPT IS OPTIMIZED OF WINDOWS BASH, FOR ALL OTHER SYSTEMS. JUST TURN ON DOCKER BEFORE RUNNING.
-ECR_REPOSITORY_NAME="ecs-vpc-peering-project-app" ## Put YOUR Ecr NAME HERE
+ECR_REPOSITORY_NAME="multi-vpc-peering-app" ## Put YOUR Ecr NAME HERE
 IMAGE_TAG="v1" # PUT YOUR IMAGE TAG HERE
 APP_DIR="./app" # PUT THE PATH TO YOUR APP FOLDER HERE
 LOCAL_IMAGE_NAME="cool-stuff" # PUT THE IMAGE NAME FOR THE INSTANCE

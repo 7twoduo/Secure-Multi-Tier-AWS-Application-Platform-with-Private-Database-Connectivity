@@ -38,9 +38,7 @@ resource "aws_security_group_rule" "db_mysql_from_ecs_task" {
     aws_route.vpc_2_to_vpc_1,
     aws_route.vpc_1_to_vpc_2
   ]
-  lifecycle {
-    ignore_changes = [route]
-  }
+
 }
 
 resource "aws_security_group_rule" "db_mysql_from_ec2" {
@@ -56,9 +54,7 @@ resource "aws_security_group_rule" "db_mysql_from_ec2" {
     aws_route.vpc_2_to_vpc_3,
     aws_route.vpc_3_to_vpc_2
   ]
-  lifecycle {
-    ignore_changes = [route]
-  }
+
 }
 
 # Create DB Subnet Group for RDS to use private subnets

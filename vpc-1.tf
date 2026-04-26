@@ -440,7 +440,7 @@ resource "aws_ecs_task_definition" "app" {
 resource "aws_ecs_service" "app" {
   count = var.enable_ecs_service ? 1 : 0
 
-  name                               = "${var.project_name}-service2"
+  name                               = "${var.project_name}-service"
   cluster                            = aws_ecs_cluster.main.id
   task_definition                    = aws_ecs_task_definition.app.arn
   desired_count                      = 1
