@@ -80,7 +80,7 @@ Build a production-inspired AWS lab where:
 
 > Save your architecture image as:
 >
-> `Evidence/architecture-diagram.png`
+> `Evidence/01-architecture/architecture-diagram.png`
 
 <img width="1200" alt="Architecture Diagram" src="./Evidence/architecture-diagram.png" />
 
