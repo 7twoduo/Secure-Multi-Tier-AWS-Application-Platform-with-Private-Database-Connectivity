@@ -1,4 +1,4 @@
-<div align="center">
+<img width="3469" height="1960" alt="image" src="https://github.com/user-attachments/assets/37f6adeb-7090-4098-86c8-c8feac65f8d5" /><div align="center">
 
 # 🔗 Secure Multi-Tier AWS Application Platform with Private Database Connectivity
 
@@ -82,7 +82,7 @@ Build a production-inspired AWS lab where:
 >
 > `Evidence/01-architecture/architecture-diagram.png`
 
-<img width="1200" alt="Architecture Diagram" src="./Evidence/architecture-diagram.png" />
+<img width="1200" alt="Architecture Diagram" src="./Evidence/01-architecture/architecture-diagram.png" />
 
 ---
 
