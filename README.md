@@ -1,5 +1,3 @@
-<img width="3469" height="1960" alt="image" src="https://github.com/user-attachments/assets/37f6adeb-7090-4098-86c8-c8feac65f8d5" /><div align="center">
-
 # 🔗 Secure Multi-Tier AWS Application Platform with Private Database Connectivity
 
 **Production-inspired AWS networking project with VPC peering, ALB, EC2, ECS on EC2, Flask, Docker, Terraform, and RDS MySQL**
