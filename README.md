@@ -1214,6 +1214,12 @@ After removing the stale resource from state, run destroy again:
 terraform destroy
 ```
 
+<img width="1388" height="319" alt="image" src="https://github.com/user-attachments/assets/703a2f3d-02a5-4e2e-a721-2d8455169ca2" />
+
+## Beware, terraform is not perfect and your destroy will lock up, you need to delete those resources yourself.
+
+# Last thing, USE THE SCRIPTS, USE THE SCRIPTS, USE THE SCRIPTS
+
 This allows Terraform to continue removing the remaining infrastructure cleanly.
 
 
