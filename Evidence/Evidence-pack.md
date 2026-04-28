@@ -76,7 +76,7 @@ This screenshot shows the public and private subnet layout used by the project.
 
 The public subnets support the Application Load Balancers. The private subnets support ECS, EC2 application workloads, and the RDS database.
 
-![Subnet List](./02-networking/subnet-list.png)
+![Subnet List](./02-networking/project1-vpc-subnet.png)(./02-networking/project2-vpc-subnet.png)(./02-networking/project3-vpc-subnet.png)
 
 ---
 
