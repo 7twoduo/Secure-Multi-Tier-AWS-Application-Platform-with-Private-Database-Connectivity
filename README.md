@@ -155,6 +155,17 @@ This project has two application paths that both reach the same private RDS MySQ
 | **Security** | IAM Roles, Security Groups, Private Subnets, Least-Privilege Network Access |
 | **Logging & Troubleshooting** | CloudWatch Logs, systemd Journals, Docker Logs, ALB Target Health |
 
+## Demo
+
+### EC2
+
+https://github.com/user-attachments/assets/6b35c502-85cb-4660-b659-ebf436be9f53
+
+### ECS
+
+https://github.com/user-attachments/assets/56eaccc6-dc43-45d1-9a5a-e115308d3e2b
+
+
 ## ✨ What This Project Demonstrates
 
 <table>
