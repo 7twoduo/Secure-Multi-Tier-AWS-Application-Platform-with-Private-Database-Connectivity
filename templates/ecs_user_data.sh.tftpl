@@ -1,14 +1,46 @@
 #!/bin/bash
-set -e
+set -euxo pipefail
+
+exec > >(tee /var/log/user-data.log | logger -t user-data -s 2>/dev/console) 2>&1
 
 mkdir -p /etc/ecs
 
 cat > /etc/ecs/ecs.config <<EOF
-ECS_CLUSTER=ecs-vpc-peering-project-cluster
+ECS_CLUSTER=${cluster_name}
+ECS_ENABLE_CONTAINER_METADATA=true
+ECS_LOGLEVEL=info
+ECS_AVAILABLE_LOGGING_DRIVERS=["json-file","awslogs"]
 EOF
 
+systemctl daemon-reload
+
 systemctl enable docker
-systemctl enable ecs
 systemctl start docker
 
-nohup bash -c 'sleep 30; systemctl start ecs' >/var/log/ecs-deferred-start.log 2>&1 &
+until systemctl is-active --quiet docker; do
+  echo "Waiting for Docker..."
+  sleep 2
+done
+
+systemctl enable ecs
+
+# Do not restart ECS during boot. Start it non-blocking.
+systemctl --no-block start ecs
+
+echo "ECS start requested."
+
+nohup bash -c '
+  for i in {1..30}; do
+    if curl -sf http://localhost:51678/v1/metadata; then
+      echo "ECS agent is healthy." >> /var/log/user-data.log
+      exit 0
+    fi
+
+    echo "Waiting for ECS agent metadata endpoint..." >> /var/log/user-data.log
+    sleep 5
+  done
+
+  echo "ECS agent did not become healthy within timeout." >> /var/log/user-data.log
+  systemctl status ecs --no-pager -l >> /var/log/user-data.log 2>&1 || true
+  journalctl -u ecs --no-pager -n 100 >> /var/log/user-data.log 2>&1 || true
+' >/tmp/ecs-health-check.log 2>&1 &

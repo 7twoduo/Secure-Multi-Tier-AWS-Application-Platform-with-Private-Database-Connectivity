@@ -10,5 +10,5 @@ variable "enable_ecs_instance" {
 variable "enable_ecs_service" {
   description = "This is to turn on ecs service which is a load balancer for ecr service."
   type    = bool
-  default = true
+  default = false
 }

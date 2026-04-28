@@ -35,8 +35,6 @@ resource "aws_security_group_rule" "db_mysql_from_ecs_task" {
   protocol                 = "tcp"
   depends_on = [
     aws_vpc_peering_connection_accepter.accept_vpc_2_to_vpc_1,
-    aws_route.vpc_2_to_vpc_1,
-    aws_route.vpc_1_to_vpc_2
   ]
 
 }
@@ -51,8 +49,6 @@ resource "aws_security_group_rule" "db_mysql_from_ec2" {
   protocol                 = "tcp"
   depends_on = [
     aws_vpc_peering_connection_accepter.accept_vpc_2_to_vpc_3,
-    aws_route.vpc_2_to_vpc_3,
-    aws_route.vpc_3_to_vpc_2
   ]
 
 }

@@ -319,7 +319,7 @@ resource "aws_launch_template" "ecs" {
 }
 # enables the ecs cluster to automatically scale based on the metric "CPUUtilization" of the cluster and adds instances to the cluster as needed to maintain the desired capacity of the cluster
 resource "aws_autoscaling_group" "ecs" {
-  name                = "${var.project_name}-ecs-asg"
+  name                = "${var.project_name}-ecs-asg1"
   desired_capacity    = var.ecs_instance_desired
   min_size            = var.ecs_instance_min
   max_size            = var.ecs_instance_max
@@ -378,6 +378,7 @@ resource "aws_ecs_cluster_capacity_providers" "main" {
 
 # ECS Task Definition   Blueprint for the ECS Instances
 resource "aws_ecs_task_definition" "app" {
+  count = var.enable_ecs_service ? 1 : 0
   family                   = "${var.project_name}-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["EC2"]
@@ -436,13 +437,13 @@ resource "aws_ecs_task_definition" "app" {
 
   tags = local.tags
 }
-# ECS Service - can be disabled if you just want the task definition and will run it manually or via CodeDeploy
+# ECS Service, this runs your task definition as a container on whatever infrastructure you decide.
 resource "aws_ecs_service" "app" {
   count = var.enable_ecs_service ? 1 : 0
 
-  name                               = "${var.project_name}-service"
+  name                               = "${var.project_name}-service1"
   cluster                            = aws_ecs_cluster.main.id
-  task_definition                    = aws_ecs_task_definition.app.arn
+  task_definition                    = aws_ecs_task_definition.app[0].arn
   desired_count                      = 1
   health_check_grace_period_seconds  = 60
   deployment_minimum_healthy_percent = 0
